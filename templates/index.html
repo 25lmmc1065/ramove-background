@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Portrait Enhancement</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Professional Portrait Enhancement</h1>
+            <p>Transform your portraits with AI-powered background removal, virtual outfits, and professional enhancements</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>Drop your image here or click to browse</h3>
+                    <p>Supports PNG, JPG, JPEG, WebP (Max 16MB)</p>
+                    <input type="file" id="imageInput" accept="image/*" hidden>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="preview-section" id="previewSection" style="display: none;">
+                <div class="preview-container">
+                    <div class="preview-box">
+                        <h3>Original</h3>
+                        <img id="originalImage" alt="Original">
+                    </div>
+                    <div class="preview-box">
+                        <h3>Enhanced</h3>
+                        <img id="processedImage" alt="Processed">
+                        <div class="loading-overlay" id="loadingOverlay">
+                            <div class="spinner"></div>
+                            <p>Processing...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls Section -->
+            <section class="controls-section" id="controlsSection" style="display: none;">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="background">🖼️ Background</button>
+                    <button class="tab-btn" data-tab="outfit">👔 Outfit</button>
+                    <button class="tab-btn" data-tab="enhancement">✨ Enhancement</button>
+                </div>
+
+                <!-- Background Tab -->
+                <div class="tab-content active" id="backgroundTab">
+                    <h3>Background Processing</h3>
+                    
+                    <div class="control-group">
+                        <button class="btn btn-primary" id="removeBgBtn">Remove Background</button>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Background Type:</label>
+                        <select id="bgType">
+                            <option value="color">Solid Color</option>
+                            <option value="gradient">Gradient</option>
+                            <option value="blur">Blurred Background</option>
+                            <option value="preset">Preset Background</option>
+                            <option value="image">Custom Image</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group" id="colorPickerGroup">
+                        <label>Background Color:</label>
+                        <input type="color" id="bgColor" value="#FFFFFF">
+                    </div>
+
+                    <div class="control-group" id="blurAmountGroup" style="display: none;">
+                        <label>Blur Amount: <span id="blurValue">25</span></label>
+                        <input type="range" id="blurAmount" min="5" max="51" step="2" value="25">
+                    </div>
+
+                    <div class="control-group" id="presetGroup" style="display: none;">
+                        <label>Preset Backgrounds:</label>
+                        <div class="preset-gallery">
+                            <div class="preset-item" data-preset="studio">
+                                <div class="preset-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                                <span>Studio</span>
+                            </div>
+                            <div class="preset-item" data-preset="office">
+                                <div class="preset-preview" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);"></div>
+                                <span>Office</span>
+                            </div>
+                            <div class="preset-item" data-preset="nature">
+                                <div class="preset-preview" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div>
+                                <span>Nature</span>
+                            </div>
+                            <div class="preset-item" data-preset="city">
+                                <div class="preset-preview" style="background: linear-gradient(135deg, #434343 0%, #000000 100%);"></div>
+                                <span>City</span>
+                            </div>
+                            <div class="preset-item" data-preset="gradient">
+                                <div class="preset-preview" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                                <span>Gradient</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group" id="customBgGroup" style="display: none;">
+                        <label>Upload Background Image:</label>
+                        <input type="file" id="customBgInput" accept="image/*">
+                    </div>
+
+                    <button class="btn btn-success" id="applyBgBtn">Apply Background</button>
+                </div>
+
+                <!-- Outfit Tab -->
+                <div class="tab-content" id="outfitTab">
+                    <h3>Virtual Dress Changer</h3>
+                    
+                    <div class="control-group">
+                        <label>Category:</label>
+                        <select id="outfitCategory">
+                            <option value="jackets">Jackets</option>
+                            <option value="formal">Formal Wear</option>
+                            <option value="casual">Casual Wear</option>
+                            <option value="traditional">Traditional Wear</option>
+                        </select>
+                    </div>
+
+                    <div class="outfit-gallery" id="outfitGallery">
+                        <!-- Jackets -->
+                        <div class="outfit-category" data-category="jackets">
+                            <div class="outfit-item" data-outfit="leather">
+                                <div class="outfit-preview">🧥</div>
+                                <span>Leather Jacket</span>
+                            </div>
+                            <div class="outfit-item" data-outfit="denim">
+                                <div class="outfit-preview">👔</div>
+                                <span>Denim Jacket</span>
+                            </div>
+                            <div class="outfit-item" data-outfit="blazer">
+                                <div class="outfit-preview">🤵</div>
+                                <span>Blazer</span>
+                            </div>
+                        </div>
+
+                        <!-- Formal -->
+                        <div class="outfit-category" data-category="formal" style="display: none;">
+                            <div class="outfit-item" data-outfit="suit">
+                                <div class="outfit-preview">🤵</div>
+                                <span>Business Suit</span>
+                            </div>
+                            <div class="outfit-item" data-outfit="dress_shirt">
+                                <div class="outfit-preview">👔</div>
+                                <span>Dress Shirt</span>
+                            </div>
+                        </div>
+
+                        <!-- Casual -->
+                        <div class="outfit-category" data-category="casual" style="display: none;">
+                            <div class="outfit-item" data-outfit="tshirt">
+                                <div class="outfit-preview">👕</div>
+                                <span>T-Shirt</span>
+                            </div>
+                            <div class="outfit-item" data-outfit="hoodie">
+                                <div class="outfit-preview">🧥</div>
+                                <span>Hoodie</span>
+                            </div>
+                        </div>
+
+                        <!-- Traditional -->
+                        <div class="outfit-category" data-category="traditional" style="display: none;">
+                            <div class="outfit-item" data-outfit="kurta">
+                                <div class="outfit-preview">👘</div>
+                                <span>Kurta</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Or Upload Custom Outfit:</label>
+                        <input type="file" id="customOutfitInput" accept="image/png">
+                    </div>
+
+                    <button class="btn btn-success" id="applyOutfitBtn">Apply Outfit</button>
+                </div>
+
+                <!-- Enhancement Tab -->
+                <div class="tab-content" id="enhancementTab">
+                    <h3>Image Enhancement</h3>
+                    
+                    <div class="control-group">
+                        <label>Brightness: <span id="brightnessValue">100%</span></label>
+                        <input type="range" id="brightness" min="50" max="200" value="100">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Contrast: <span id="contrastValue">100%</span></label>
+                        <input type="range" id="contrast" min="50" max="200" value="100">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="hdrEnhancement">
+                            <span>Dynamic Range Enhancement (HDR)</span>
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="skinTone">
+                            <span>Skin Tone Enhancement</span>
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="studioLighting">
+                            <span>Soft Studio Lighting</span>
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="colorCorrection">
+                            <span>Auto Color Correction</span>
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="preserveFace" checked>
+                            <span>Preserve Face Details</span>
+                        </label>
+                    </div>
+
+                    <button class="btn btn-success" id="applyEnhancementBtn">Apply Enhancements</button>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="resetBtn">🔄 Reset</button>
+                    <button class="btn btn-primary" id="processAllBtn">⚡ Process All</button>
+                    <button class="btn btn-success" id="downloadBtn">💾 Download</button>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>Built with Python, Flask, OpenCV, and AI • © 2024 Professional Portrait Enhancement</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
