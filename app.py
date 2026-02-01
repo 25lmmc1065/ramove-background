@@ -377,4 +377,6 @@ if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
     # Run app
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Note: Set debug=False in production for security
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(debug=debug_mode, host='0.0.0.0', port=5000)
